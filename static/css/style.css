@@ -1,0 +1,20 @@
+.instruct-header {
+  max-width:800px;
+  cursor:default;
+  min-height:520px;
+  position:relative;
+}
+.next-btn {
+    position:absolute;
+    bottom:0px;
+    right:0px;
+}
+.prev-btn {
+    position:absolute;
+    bottom:0px;
+    left:0px;
+}
+#video-container {
+    background-color:#f1f1f1;margin-left:auto;margin-right:auto;
+    margin-bottom:20px;margin-top:20px;
+}
