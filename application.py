@@ -1,6 +1,7 @@
 from flask import Flask, request, session
 from flask import render_template
 from flask_cors import *
+from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta
 import ml.mimic_face as mf
 import numpy as np
@@ -8,7 +9,8 @@ import random
 import uuid
 import base64
 import os
-import db
+import db as database
+from config import conn_str
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__, static_folder="static/")
@@ -19,6 +21,10 @@ name_list = ["Liam", "Emma", "Noah", "Olivia", "William", "Ava", "James", "Isabe
 emotion_dict = {"neutral": "01", "calm": "02", "happy": "03", "sad": "04", "angry": "05", "fearful": "06",
                 "disgust": "07", "surprised": "08"}
 application.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+application.config['SQLALCHEMY_DATABASE_URI'] = conn_str
+
+db = SQLAlchemy(application)
 
 
 @application.route("/index", methods=['GET'])
@@ -32,7 +38,10 @@ def submit_emotion():
     emotion = request.values.get("emotion")
     mny = request.values.get("mny")
     idx = session.get("index")
-    # todo mysql save idx (round id), emotion & mny (phase 1)
+    share = session.get("give")
+    pic_path = session.get("submit_pic", '')
+    opponent = session.get("name")
+    database.insert_section1_play(session.get("dir"), opponent, idx, share, pic_path, emotion, mny)
 
     give = session.get("give")
     eid = emotion_dict[emotion]
@@ -75,9 +84,8 @@ def submit_question():
         session["dir"] = uuid.uuid4()
         os.mkdir("./static/img/testers/" + str(session["dir"]))
         os.mkdir("./static/img/testers/" + str(session["dir"]) + "/gnt")
-    db.create_user(session.get("dir"))
-    # todo mysql save sex, age & race from questionnaire
-
+    database.create_user(session.get("dir"))
+    database.insert_bio_info(session.get("dir"), sex, age, race)
     return "success"
 
 
@@ -86,7 +94,10 @@ def submit_question():
 def update_mny():
     mny = request.values.get("mny")
     session["give"] = mny
-    # todo mysql save mny (phase 2)
+    if session.get("idx2", 0) == 0:
+        database.insert_money_to_agent1(session.get("dir"), mny)
+    else:
+        database.insert_money_to_agent2(session.get("dir"), mny)
     return "success"
 
 
@@ -116,7 +127,10 @@ def submit_mny():
 def submit_evaluation():
     similar = request.values.get("similar")
     treat = request.values.get("treat")
-    # todo mysql save similar & treat (phase 2 questionnaire)
+    if session.get("idx2", 0) == 0:
+        database.insert_comment_to_agent1(session.get("dir"), similar, treat)
+    else:
+        database.insert_comment_to_agent2(session.get("dir"), similar, treat)
     return "success"
 
 
@@ -129,6 +143,7 @@ def submit_pic():
     file_path = './static/img/testers/' + str(dir_name) + '/' + str(mny) + '.jpg'
     with open(file_path, 'wb') as f:
         f.write(base64.b64decode(rcv_data))
+    session["submit_pic"] = '/static/img/testers/' + str(dir_name) + '/' + str(mny) + '.jpg'
     return "success"
 
 
@@ -230,8 +245,8 @@ def phase2_4():
     else:
         return application.send_static_file("phase2-4.html")
 
-
 # run the app.
 if __name__ == "__main__":
+    db.init_app(application)
     CORS(application, supports_credentials=True)
     application.run(debug=True, ssl_context='adhoc')

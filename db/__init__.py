@@ -1,20 +1,13 @@
-from flask_sqlalchemy import SQLAlchemy
-import os, uuid
-
-db = SQLAlchemy()
-username = os.environ.get('FEMS_MYSQL_USR', 'root')
-password = os.environ.get('FEMS_MYSQL_PWD', '')
-conn_str = 'mysql://' + username + ':' + password + '@localhost/fems_db'
-
-from .static_vars import Sex, AgeGroup
+import uuid
+from application import db
 
 class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_uuid = db.Column(db.String(128), unique=True, nullable=False)
     user_step = db.Column(db.Integer)
     # Basic info
-    sex = db.Column(db.Integer)
-    age_group = db.Column(db.Integer)
+    sex = db.Column(db.String(32))
+    age_group = db.Column(db.String(32))
     race_group = db.Column(db.String(128))
     # Section 1
     # s1_opponent = db.Column(db.String(128))
@@ -44,6 +37,9 @@ class Result_Section1(db.Model):
 
     def __repr__(self):
         return '<Report %r>' % self.user_uuid
+
+db.create_all()
+db.session.commit()
 
 def get_user_uuid():
     res = uuid.uuid4()
