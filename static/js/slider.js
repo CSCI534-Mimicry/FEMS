@@ -1,5 +1,5 @@
 var emotion = "neutral";
-var base_url = "https://127.0.0.1:5000";
+var base_url = "";
 
 function init() {
     emotion = "neutral";

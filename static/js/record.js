@@ -1,4 +1,4 @@
-var base_url = "https://127.0.0.1:5000"
+var base_url = ""
 
 function init() {
     var main_frame = document.getElementById("video-container");

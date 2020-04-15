@@ -1,4 +1,4 @@
-var base_url = "https://127.0.0.1:5000";
+var base_url = "";
 var sex = "male";
 var age = "<18";
 var race = "White"
