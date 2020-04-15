@@ -25,23 +25,35 @@
 </div>
 <div id="main" class="instruct-header px-3 py-3 pt-md-6 pb-md-4 mx-auto text-center">
     <h2 class="display-5 mb-4">Example for section1</h2>
-    <p class="lead">Review what you have done in previous part and answer the following questions.</p>
-    <p class="lead">Alice decided to share
-        <strong>$7</strong>
-        with you. You receive
-        <strong>$7 * 3 = $21</strong>.</p>
+    <p class="lead">Now you will be asked to report your emotional feelings on a scale, and how much
+        money you want give back to that person out of your <strong>$X &times; 3</strong>.</p>
+    <p class="lead"><strong>Example:</strong> Liam decided to share
+        <strong>$7</strong> with you. You receive <strong>$7 &times; 3 = $21</strong>.</p>
     <p class="lead"><strong>1. </strong>How do you feel about this offer?</p>
-    <div class="btn-group mt-2 mb-4">
-        <button type="button" class="btn btn-sm btn-light">Neutral</button>
-        <button type="button" class="btn btn-sm btn-light">Happy</button>
-        <button type="button" class="btn btn-sm btn-light">Sad</button>
-        <button type="button" class="btn btn-sm btn-light">Disgust</button>
-        <button type="button" class="btn btn-sm btn-light">Angry</button>
-        <button type="button" class="btn btn-sm btn-light">Surprised</button>
+    <div class="btn-group mt-2 mb-4 btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-light active">
+            <input type="radio" checked>Neutral
+        </label>
+        <label class="btn btn-light">
+            <input type="radio">Happy
+        </label>
+        <label class="btn btn-light">
+            <input type="radio">Sad
+        </label>
+        <label class="btn btn-light">
+            <input type="radio">Disgust
+        </label>
+        <label class="btn btn-light">
+            <input type="radio">Angry
+        </label>
+        <label class="btn btn-light">
+            <input type="radio">Surprised
+        </label>
     </div>
     <p class="lead"><strong>2. </strong>How much money do you want to give back out of your $21?</p>
+    <div id="data" style="display:none">21</div>
     <div class="mt-4 mb-4 ml-2">
-        <input id="mny" style="width:90%" type="text" >
+        <input id="mny" style="width:90%" type="text">
     </div>
     <div style="width:100%;height:50px;"></div>
     <a class="next-btn btn btn-sm btn-info" href="./phase1-st.html" role="button">Next&nbsp;&raquo;</a>
