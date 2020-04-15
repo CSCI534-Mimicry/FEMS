@@ -245,8 +245,11 @@ def phase2_4():
     else:
         return application.send_static_file("phase2-4.html")
 
-# run the app.
-if __name__ == "__main__":
+def run():
     db.init_app(application)
     CORS(application, supports_credentials=True)
     application.run(debug=True, ssl_context='adhoc')
+
+# run the app.
+if __name__ == "__main__":
+    run()
