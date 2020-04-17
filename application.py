@@ -58,8 +58,9 @@ def submit_emotion():
     idx_list = list()
     if file_list is not None:
         for f_name in file_list:
-            idx = f_name.split(".")[0]
-            idx_list.append(int(idx))
+            if f_name.split(".")[-1] == "jpg":
+                idx = f_name.split(".")[0]
+                idx_list.append(int(idx))
         id_list = np.array(idx_list)
         fid = np.argmin(np.abs(id_list - int(mny)))
         file2 = dir_name + file_list[int(fid)]
