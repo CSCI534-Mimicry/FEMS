@@ -3,8 +3,8 @@ from flask import render_template
 from flask_cors import *
 from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta
-import ml.mimic_face as mf
-import numpy as np
+# import ml.mimic_face as mf
+# import numpy as np
 import random
 import uuid
 import base64
@@ -22,7 +22,7 @@ emotion_dict = {"neutral": "01", "calm": "02", "happy": "03", "sad": "04", "angr
                 "disgust": "07", "surprised": "08"}
 application.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-application.config['SQLALCHEMY_DATABASE_URI'] = conn_str
+# application.config['SQLALCHEMY_DATABASE_URI'] = conn_str
 
 db = SQLAlchemy(application)
 
@@ -41,7 +41,7 @@ def submit_emotion():
     share = session.get("give")
     pic_path = session.get("submit_pic", '')
     opponent = session.get("name")
-    database.insert_section1_play(session.get("dir"), opponent, idx, share, pic_path, emotion, mny)
+    # database.insert_section1_play(session.get("dir"), opponent, idx, share, pic_path, emotion, mny)
 
     give = session.get("give")
     eid = emotion_dict[emotion]
@@ -65,9 +65,9 @@ def submit_emotion():
         file2 = dir_name + file_list[int(fid)]
     else:
         file2 = "./static/img/actors/2/01-0.jpg"
-    f, e = mf.handle_input(file1, file2)
-    img = mf.handle_predict(f, e)
-    mf.handle_output(img, dir_name + "/gnt/" + str(mny) + ".jpg")
+    # f, e = mf.handle_input(file1, file2)
+    # img = mf.handle_predict(f, e)
+    # mf.handle_output(img, dir_name + "/gnt/" + str(mny) + ".jpg")
 
     return "success"
 
@@ -84,8 +84,8 @@ def submit_question():
         session["dir"] = uuid.uuid4()
         os.mkdir("./static/img/testers/" + str(session["dir"]))
         os.mkdir("./static/img/testers/" + str(session["dir"]) + "/gnt")
-    database.create_user(session.get("dir"))
-    database.insert_bio_info(session.get("dir"), sex, age, race)
+    # database.create_user(session.get("dir"))
+    # database.insert_bio_info(session.get("dir"), sex, age, race)
     return "success"
 
 
@@ -94,10 +94,10 @@ def submit_question():
 def update_mny():
     mny = request.values.get("mny")
     session["give"] = mny
-    if session.get("idx2", 0) == 0:
-        database.insert_money_to_agent1(session.get("dir"), mny)
-    else:
-        database.insert_money_to_agent2(session.get("dir"), mny)
+    # if session.get("idx2", 0) == 0:
+    #     database.insert_money_to_agent1(session.get("dir"), mny)
+    # else:
+    #     database.insert_money_to_agent2(session.get("dir"), mny)
     return "success"
 
 
@@ -127,10 +127,10 @@ def submit_mny():
 def submit_evaluation():
     similar = request.values.get("similar")
     treat = request.values.get("treat")
-    if session.get("idx2", 0) == 0:
-        database.insert_comment_to_agent1(session.get("dir"), similar, treat)
-    else:
-        database.insert_comment_to_agent2(session.get("dir"), similar, treat)
+    # if session.get("idx2", 0) == 0:
+    #     database.insert_comment_to_agent1(session.get("dir"), similar, treat)
+    # else:
+    #     database.insert_comment_to_agent2(session.get("dir"), similar, treat)
     return "success"
 
 
