@@ -1,5 +1,5 @@
 import uuid
-from application import db
+from application import dbAlchemy as db
 
 class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)

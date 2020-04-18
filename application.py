@@ -26,7 +26,7 @@ application.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 application.config['SQLALCHEMY_DATABASE_URI'] = conn_str
 
-db = SQLAlchemy(application)
+dbAlchemy = SQLAlchemy(application)
 vh_gen_finish = False
 
 @application.route("/index", methods=['GET'])
@@ -249,7 +249,7 @@ def check_output_files():
     return "Done"
 
 def run():
-    db.init_app(application)
+    dbAlchemy.init_app(application)
     CORS(application, supports_credentials=True)
     # application.run(ssl_context='adhoc')
     application.run()
