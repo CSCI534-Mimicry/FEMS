@@ -75,12 +75,7 @@ def update_mny():
         database.insert_money_to_agent2(session.get("dir"), mny)
     return "success"
 
-
-@application.route("/submit_mny", methods=['POST'])
-@cross_origin()
-def submit_mny():
-    mny = request.values.get("mny")
-    session["give"] = mny
+def get_agent_pic_from_mny(mny):
     dir_name = session.get("dir")
     idx2 = session.get("idx2")
     if idx2 is not None and idx2 == 1:
@@ -95,6 +90,13 @@ def submit_mny():
         result = "./img/testers/" + str(dir_name) + "/gnt/" + str(mny) + ".png"
 
     return result
+
+@application.route("/submit_mny", methods=['POST'])
+@cross_origin()
+def submit_mny():
+    mny = request.values.get("mny")
+    session["give"] = mny
+    return get_agent_pic_from_mny(mny)
 
 
 @application.route("/submit_evaluation", methods=['POST'])
@@ -190,7 +192,7 @@ def phase2_1():
     else:
         session["idx2"] = idx2 + 1
 
-    img = "./img/agents/1.jpg"
+    img = get_agent_pic_from_mny(5)
     context = {"img": img}
     return render_template('phase2-1.html', **context)
 
