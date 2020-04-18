@@ -19,7 +19,8 @@ function submit_question() {
 	    url: base_url + "/submit_question",
 	    data: {"sex": sex, "age": age, "race": race},
 	    type: 'POST',
-	    success: function(result) {}
+	    success: function(result) {
+            location.href='./phase1-intro.html';
+        }
     });
-    setTimeout("javascript:location.href='./phase1-intro.html'", 500);
 }

@@ -123,9 +123,10 @@ function update_mny() {
 	    url: base_url + "/update_mny",
 	    data: {"mny": mny},
 	    type: 'POST',
-	    success: function(result) {}
+	    success: function(result) {
+            location.href='/phase2-2';
+        }
     });
-    setTimeout("javascript:location.href='/phase2-2'", 500);
 }
 
 function send_evaluation() {
@@ -135,9 +136,10 @@ function send_evaluation() {
 	    url: base_url + "/submit_evaluation",
 	    data: {"similar": similar, "treat": treat},
 	    type: 'POST',
-	    success: function(result) {}
+	    success: function(result) {
+            location.href='/phase2-4';
+        }
     });
-    setTimeout("javascript:location.href='/phase2-4'", 500);
 }
 
 function send_emotion() {
@@ -146,9 +148,11 @@ function send_emotion() {
 	    url: base_url + "/submit_emotion",
 	    data: {"emotion": emotion, "mny": mny},
 	    type: 'POST',
-	    success: function(result) {}
+	    success: function(result) {
+            vh_generation_one_pic();
+            setTimeout("javascript:location.href='/phase1-3'", 500);
+        }
     });
-    setTimeout("javascript:location.href='/phase1-3'", 500);
 }
 
 function pick_partner() {
@@ -160,7 +164,7 @@ function phase2_fb() {
 }
 
 function phase2_nt() {
-    setTimeout("javascript:location.href='/phase2-1'", 3000);
+    vh_files_check();
 }
 
 
