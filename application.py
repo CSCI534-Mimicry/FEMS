@@ -14,7 +14,7 @@ import vh
 import time
 
 # EB looks for an 'application' callable by default.
-application = Flask(__name__, static_folder="static/")
+application = Flask(__name__, static_folder="static/", static_url_path='')
 application.config['SECRET_KEY'] = os.urandom(24)
 give_list = [0, 0, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 10]
 name_list = ["Liam", "Emma", "Noah", "Olivia", "William", "Ava", "James", "Isabella", "Oliver", "Sophia",
@@ -337,7 +337,7 @@ def check_output_files():
     return "Done"
 
 def run():
-    dbAlchemy.init_app(application)
+    db.init_app(application)
     CORS(application, supports_credentials=True)
     # application.run(ssl_context='adhoc')
     application.run()
