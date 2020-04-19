@@ -12,6 +12,7 @@ import os
 from config import conn_str
 import vh
 import time
+from gevent.pywsgi import WSGIServer
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__, static_folder="static/", static_url_path='')
@@ -167,11 +168,11 @@ def get_agent_pic_from_mny(mny):
     if idx2 is not None and idx2 == 1:
         sex = session.get("sex")
         if sex == "male":
-            return "./img/actors/1/01-0.jpg"
+            return "./img/actors/3/out-Brad-0.png"
         else:
-            return "./img/actors/2/01-0.jpg"
+            return "./img/actors/4/out-Rachel-0.png"
     if dir_name is None:
-        result = "./img/actors/2/01-0.jpg"
+        result = "./img/actors/4/out-Rachel-0.png"
     else:
         result = "./img/testers/" + str(dir_name) + "/gnt/" + str(mny) + ".png"
 
@@ -296,7 +297,8 @@ def phase2_2():
 
 @application.route("/phase2-3", methods=['GET'])
 def phase2_3():
-    img = "./img/agents/1.jpg"
+    mny = session.get("give", 5)
+    img = get_agent_pic_from_mny(mny)
     context = {"img": img}
     return render_template('phase2-3.html', **context)
 
@@ -340,7 +342,9 @@ def run():
     db.init_app(application)
     CORS(application, supports_credentials=True)
     # application.run(ssl_context='adhoc')
-    application.run()
+    # application.run()
+    http_server = WSGIServer(('', 5000), application)
+    http_server.serve_forever()
 
 # run the app.
 run()
