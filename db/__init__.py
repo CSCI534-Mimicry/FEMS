@@ -9,10 +9,6 @@ class Result(db.Model):
     sex = db.Column(db.String(32))
     age_group = db.Column(db.String(32))
     race_group = db.Column(db.String(128))
-    # Section 1
-    # s1_opponent = db.Column(db.String(128))
-    # s1_user_role = db.Column(db.Integer)
-    # s1_results = db.relationship('Result_Section1', backref='result', lazy=True)
     # Section 2
     s2_a1_money = db.Column(db.Integer)
     s2_a1_similar = db.Column(db.Integer)
@@ -46,11 +42,13 @@ def get_user_uuid():
     return res
 
 def create_user(user_uuid):
+    user_uuid = str(user_uuid)
     me = Result(user_uuid=user_uuid, user_step=0)
     db.session.add(me)
     db.session.commit()
 
 def insert_bio_info(user_uuid, sex, age_group, race_group):
+    user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
     me.sex = sex
     me.age_group = age_group
@@ -58,28 +56,33 @@ def insert_bio_info(user_uuid, sex, age_group, race_group):
     db.session.commit()
 
 def insert_section1_play(user_uuid, opponent_name, round, money_receive, feel_file, feel_str, money_send):
+    user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
     res = Result_Section1(user=me.id, round=round, opponent=opponent_name, receive=money_receive, feel_file=feel_file, feel_str=feel_str, send=money_send)
     db.session.add(res)
     db.session.commit()
 
 def insert_money_to_agent1(user_uuid, money):
+    user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
     me.s2_a1_money = money
     db.session.commit()
 
 def insert_comment_to_agent1(user_uuid, similar, like_human):
+    user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
     me.s2_a1_similar = similar
     me.s2_a1_human = like_human
     db.session.commit()
 
 def insert_money_to_agent2(user_uuid, money):
+    user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
     me.s2_a2_money = money
     db.session.commit()
 
 def insert_comment_to_agent2(user_uuid, similar, like_human):
+    user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
     me.s2_a2_similar = similar
     me.s2_a2_human = like_human
