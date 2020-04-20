@@ -37,6 +37,9 @@ function init() {
     });
 }
 
+var round;
+var curr_usr;
+
 function init2() {
     var total = document.getElementById("data").innerText;
     var data = [];
@@ -60,6 +63,24 @@ function init2() {
         pos.push(data[j] * mgn);
     }
 
+    $.ajax({
+	    url: base_url + "/current_usr",
+        type: 'GET',
+        async: false,
+	    success: function(result) {
+            curr_usr = result;
+        }
+    });
+
+    $.ajax({
+	    url: base_url + "/current_sec2_round",
+        type: 'GET',
+        async: false,
+	    success: function(result) {
+            round = result;
+        }
+    });
+
     $("#mny").slider({
         ticks: data,
         ticks_positions: pos,
@@ -70,7 +91,7 @@ function init2() {
 	    },
 	    value: 5
     }).on('change', function (e) {
-        debounce(handleChange(e.value.newValue), 500);
+        debounce(handleChange(e.value.newValue), 1);
     });
 }
 
@@ -92,14 +113,8 @@ function init3() {
 }
 
 function handleChange(v) {
-    $.ajax({
-	    url: base_url + "/submit_mny",
-	    data: {"mny": v},
-	    type: 'POST',
-	    success: function(result) {
-            document.getElementById("face").src = result;
-        }
-    });
+    if(round == 0) document.getElementById("face").src = "/img/testers/" + curr_usr + "/gnt/" + v + ".png";
+    else document.getElementById("face").src = "/img/testers/" + curr_usr + "/ran/" + v + ".png";
 }
 
 function debounce(fn, idle) {

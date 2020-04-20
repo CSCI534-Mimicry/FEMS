@@ -1,13 +1,5 @@
 var base_url = ""
 
-function setUploadEnable() {
-    document.getElementById("upload").disabled = false;
-}
-
-function setUploadDisable() {
-    document.getElementById("upload").disabled = true;
-}
-
 function setTakePhotoEnable() {
     document.getElementById("snap").disabled = false;
 }
@@ -24,19 +16,9 @@ function setRemoveDisable() {
     document.getElementById("remove").disabled = true;
 }
 
-function setNextEnable() {
-    document.getElementById("next").disabled = false;
-}
-
-function setNextDisable() {
-    document.getElementById("next").disabled = true;
-}
-
 function setAllDisable() {
-    setNextDisable();
     setRemoveDisable();
     setTakePhotoDisable();
-    setUploadDisable();
 }
 
 function init() {
@@ -47,8 +29,8 @@ function init() {
     var rmv = document.getElementById("remove");
     var upload = document.getElementById("upload");
     var fw = main_frame.clientWidth||main_frame.offsetWidth;
-    vw = 640;
-    vh = 480;
+    vw = fw * 0.4;
+    vh = fw * 0.3;
     main_frame.style.width = vw + "px";
     main_frame.style.height = vh + "px";
     main_frame.innerHTML = "<video id='video' width='" + vw + "px' height='" + vh + "px'></video>";
@@ -69,12 +51,9 @@ function init() {
         image.src = canvas.toDataURL("image/jpg");
         setTakePhotoDisable();
         setRemoveEnable();
-        setUploadEnable();
     });
     rmv.addEventListener('click', function() {
         setRemoveDisable();
-        setUploadDisable();
-        setNextDisable();
         main_frame.innerHTML = "<video id='video' width='" + vw + "px' height='" + vh + "px'></video>";
         let video = document.getElementById("video");
         let promise = navigator.mediaDevices.getUserMedia(constraints);
@@ -84,23 +63,4 @@ function init() {
             video.play();
         });
     });
-    upload.addEventListener('click', function() {
-        var canvas = document.getElementById("canvas");
-        var imgData = canvas.toDataURL("image/jpg");
-        var base64Data = imgData.substring(22);
-	    $.ajax({
-	        url: base_url + "/submit_pic",
-	        data: {"img": base64Data},
-	        type: 'POST',
-	        success: function(result) {
-                setUploadDisable();
-                setNextEnable();
-                alert(result);
-            }
-        });
-    });
-}
-
-function submit_pic() {
-    location.href='/phase1-2';
 }

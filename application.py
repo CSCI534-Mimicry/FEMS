@@ -1,5 +1,5 @@
 from flask import Flask, request, session
-from flask import render_template
+from flask import render_template, make_response
 from flask_cors import *
 from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta
@@ -16,7 +16,7 @@ import time
 # EB looks for an 'application' callable by default.
 application = Flask(__name__, static_folder="static/", static_url_path='')
 application.config['SECRET_KEY'] = os.urandom(24)
-give_list = [0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 10]
+give_list = [0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10]
 name_list = ["Liam", "Emma", "Noah", "Olivia", "William", "Ava", "James", "Isabella", "Oliver", "Sophia",
              "Benjamin", "Charlotte", "Elijah", "Mia"]
 emotion_dict = {"neutral": "01", "calm": "02", "happy": "03", "sad": "04", "angry": "05", "fearful": "06",
@@ -64,9 +64,11 @@ class Result_Section1(db.Model):
 db.create_all()
 db.session.commit()
 
-def database_get_user_uuid():
-    res = uuid.uuid4()
-    return res
+def database_get_user(user_uuid):
+    me = Result.query.filter_by(user_uuid=user_uuid).first()
+    session["dir"] = user_uuid
+    session["sex"] = me.sex
+    return me
 
 def database_create_user(user_uuid):
     user_uuid = str(user_uuid)
@@ -141,13 +143,14 @@ def submit_question():
     session["sex"] = sex
     age = request.values.get("age")
     race = request.values.get("race")
-    session["dir"] = uuid.uuid4()
+    session["dir"] = str(uuid.uuid4())
     os.mkdir("./static/img/testers/" + str(session["dir"]))
     os.mkdir("./static/img/testers/" + str(session["dir"]) + "/gnt")
+    os.mkdir("./static/img/testers/" + str(session["dir"]) + "/ran")
     database_create_user(session.get("dir"))
     database_insert_bio_info(session.get("dir"), sex, age, race)
-    print(session.get("dir"))
-    return "success"
+    res = make_response("success")
+    return res
 
 
 @application.route("/update_mny", methods=['POST'])
@@ -165,11 +168,10 @@ def get_agent_pic_from_mny(mny):
     dir_name = session.get("dir")
     idx2 = session.get("idx2")
     if idx2 is not None and idx2 == 1:
-        sex = session.get("sex")
-        if sex == "male":
-            return "./img/actors/3/out-Brad-0.png"
+        if dir_name is None:
+            result = "./img/actors/4/out-Rachel-0.png"
         else:
-            return "./img/actors/4/out-Rachel-0.png"
+            result = "./img/testers/" + str(dir_name) + "/ran/" + str(mny) + ".png"
     if dir_name is None:
         result = "./img/actors/4/out-Rachel-0.png"
     else:
@@ -183,6 +185,14 @@ def submit_mny():
     mny = request.values.get("mny")
     session["give"] = mny
     return get_agent_pic_from_mny(mny)
+
+@application.route("/current_usr", methods=['GET'])
+def get_current_user():
+    return str(session.get("dir"))
+
+@application.route("/current_sec2_round", methods=['GET'])
+def get_current_sec2_round():
+    return str(session.get("idx2", 0))
 
 
 @application.route("/submit_evaluation", methods=['POST'])
@@ -320,7 +330,11 @@ def generate_action_units_one_pic():
 
 @application.route("/generate-action-units", methods=['GET'])
 def generate_action_units():
-    vh.purse_au_pics()
+    if "user" in request.values:
+        database_get_user(str(request.values["user"]))
+        vh.purse_au_pics(request.values["user"])
+    else:
+        vh.purse_au_pics()
     return "Done"
 
 @application.route("/check-output-files", methods=['GET'])
@@ -335,6 +349,25 @@ def check_output_files():
         while not os.path.exists(out_files_dir + str(i) + '.png'):
             time.sleep(1)
     vh_gen_finish = True
+    return "Done"
+
+@application.route("/generate-compare-agent", methods=['GET'])
+def generate_compare_agent():
+    import shutil
+    username = str(session.get("dir"))
+    user_dir = "./static/img/testers/" + username + "/ran/"
+    sex = session.get("sex", "")
+    agent_dir = "./static/img/actors/6/"
+    if sex == "male":
+        agent_dir = "./static/img/actors/5/"
+    file_list = os.listdir(agent_dir)
+    random.shuffle(file_list)
+    for i in range(len(file_list)):
+        from_f = agent_dir + file_list[i]
+        to_f = user_dir + str(i) + '.png'
+        if os.path.exists(to_f):
+            os.remove(to_f)
+        shutil.copy(from_f, to_f)
     return "Done"
 
 def run():

@@ -23,3 +23,11 @@ function vh_files_check() {
         }
     });
 }
+
+function vh_agent2_generation() {
+	$.ajax({
+	    url: "/generate-compare-agent",
+	    type: 'GET',
+	    success: function(result) {}
+    });
+}
