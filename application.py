@@ -12,12 +12,11 @@ import os
 from config import conn_str
 import vh
 import time
-from gevent.pywsgi import WSGIServer
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__, static_folder="static/", static_url_path='')
 application.config['SECRET_KEY'] = os.urandom(24)
-give_list = [0, 0, 1, 2, 3, 4, 5, 5, 6, 7, 8, 9, 10, 10]
+give_list = [0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10, 10]
 name_list = ["Liam", "Emma", "Noah", "Olivia", "William", "Ava", "James", "Isabella", "Oliver", "Sophia",
              "Benjamin", "Charlotte", "Elijah", "Mia"]
 emotion_dict = {"neutral": "01", "calm": "02", "happy": "03", "sad": "04", "angry": "05", "fearful": "06",
