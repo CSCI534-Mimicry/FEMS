@@ -342,9 +342,7 @@ def run():
     db.init_app(application)
     CORS(application, supports_credentials=True)
     # application.run(ssl_context='adhoc')
-    # application.run()
-    http_server = WSGIServer(('', 5000), application)
-    http_server.serve_forever()
+    application.run()
 
 # run the app.
 run()
