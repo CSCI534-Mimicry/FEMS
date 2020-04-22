@@ -21,3 +21,14 @@
 .tooltip.in {
   opacity: 1;
 }
+.sender-txt {
+  font-weight: bold;
+  color: #0070c0;
+}
+.receiver-txt {
+  font-weight: bold;
+  color: #00B050;
+}
+strong {
+  font-weight: bold;
+}

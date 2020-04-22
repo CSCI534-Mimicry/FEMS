@@ -88,6 +88,7 @@ function init() {
         var canvas = document.getElementById("canvas");
         var imgData = canvas.toDataURL("image/jpg");
         var base64Data = imgData.substring(22);
+        document.getElementById('upload-text').style.visibility = 'visible';
 	    $.ajax({
 	        url: base_url + "/submit_pic",
 	        data: {"img": base64Data},
@@ -95,6 +96,7 @@ function init() {
 	        success: function(result) {
                 setUploadDisable();
                 setNextEnable();
+                document.getElementById('upload-text').style.visibility = 'hidden';
                 alert(result);
             }
         });

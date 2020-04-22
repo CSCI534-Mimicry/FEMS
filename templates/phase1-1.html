@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Welcome to FEMS</title>
     <link rel="icon" href="./img/favicon.png" type="image/x-icon"/>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style.css?version=2">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script type="text/javascript" src="./js/record.js"></script>
+    <script type="text/javascript" src="./js/record.js?version=3"></script>
 </head>
 <body onload="init()">
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3 bg-white border-bottom shadow-sm">
@@ -69,7 +69,9 @@
             </svg>
         </button>
     </div>
-    <div style="width:100%;height:50px;"></div>
+    <div style="width:100%;height:50px;">
+        <p id="upload-text" style="padding-top: 10px; font-weight: bold; visibility: hidden;">Uploading...</p>
+    </div>
     <button id="next" class="next-btn btn btn-sm btn-info" onclick="submit_pic()">Next&nbsp;&raquo;</button>
 </div>
 

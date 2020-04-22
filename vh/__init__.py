@@ -73,10 +73,12 @@ def purse_au_pic(mny_idx, usr_name=None):
         action_unit[4], action_unit[5], action_unit[6], action_unit[7], \
         action_unit[8], action_unit[9], action_unit[10]
     
+    session["mny_" + str(mny_idx)] = True
     status, vh_pic = au_delivery(mny_idx, au_1, au_2, au_4, au_5, au_6, au_7, au_10, au_12, au_25, au_26, au_45, usr_name)
     if status != 200:
+        del session["mny_" + str(mny_idx)]
         return
-    session["mny_" + str(mny_idx)] = True
+    
     vh_pic_url = base_vh_host_url + vh_pic
     vh_pic_filedata = urllib.request.urlopen(vh_pic_url)
     datatowrite = vh_pic_filedata.read()

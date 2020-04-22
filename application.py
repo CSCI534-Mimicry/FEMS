@@ -26,7 +26,6 @@ application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 application.config['SQLALCHEMY_DATABASE_URI'] = conn_str
 
 db = SQLAlchemy(application)
-vh_gen_finish = False
 
 class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -122,6 +121,7 @@ def index():
     return application.send_static_file("index.html")
 
 
+# require: index, give, name, submit_pic, dir
 @application.route("/submit_emotion", methods=['POST'])
 @cross_origin()
 def submit_emotion():
@@ -153,6 +153,7 @@ def submit_question():
     return res
 
 
+# require: idx2, dir
 @application.route("/update_mny", methods=['POST'])
 @cross_origin()
 def update_mny():
@@ -164,6 +165,7 @@ def update_mny():
         database_insert_money_to_agent2(session.get("dir"), mny)
     return "success"
 
+# require: idx2, dir
 def get_agent_pic_from_mny(mny):
     dir_name = session.get("dir")
     idx2 = session.get("idx2")
@@ -172,10 +174,11 @@ def get_agent_pic_from_mny(mny):
             result = "./img/actors/4/out-Rachel-0.png"
         else:
             result = "./img/testers/" + str(dir_name) + "/ran/" + str(mny) + ".png"
-    if dir_name is None:
-        result = "./img/actors/4/out-Rachel-0.png"
     else:
-        result = "./img/testers/" + str(dir_name) + "/gnt/" + str(mny) + ".png"
+        if dir_name is None:
+            result = "./img/actors/4/out-Rachel-0.png"
+        else:
+            result = "./img/testers/" + str(dir_name) + "/gnt/" + str(mny) + ".png"
 
     return result
 
@@ -195,6 +198,7 @@ def get_current_sec2_round():
     return str(session.get("idx2", 0))
 
 
+# require: idx2, dir
 @application.route("/submit_evaluation", methods=['POST'])
 @cross_origin()
 def submit_evaluation():
@@ -207,6 +211,7 @@ def submit_evaluation():
     return "success"
 
 
+# require: dir (user), give
 @application.route("/submit_pic", methods=['POST'])
 @cross_origin()
 def submit_pic():
@@ -221,6 +226,7 @@ def submit_pic():
     return "success"
 
 
+# require: index, dir
 @application.route("/phase1-0", methods=['GET'])
 def phase1_0():
     session.permanent = True
@@ -231,11 +237,16 @@ def phase1_0():
         session["strategy"] = strategy_list
         idx = 0
         session["index"] = idx
+        name_ids_list = [i for i in range(14)]
+        random.shuffle(name_ids_list)
+        session["name_ids"] = name_ids_list
     else:
         idx = session.get("index") + 1
         session["index"] = idx
 
     name_id = random.randint(0, 13)
+    if "name_ids" in session:
+        name_id = session.get("name_ids")[idx]
     name = name_list[name_id]
     give = strategy_list[idx]
     receive = int(give) * 3
@@ -249,6 +260,7 @@ def phase1_0():
     return render_template('phase1-0.html', **context)
 
 
+# require: name, give, receive, dir
 @application.route("/phase1-1", methods=['GET'])
 def phase1_1():
     name = session.get("name")
@@ -260,6 +272,7 @@ def phase1_1():
     return render_template('phase1-1.html', **context)
 
 
+# require: name, give, receive, dir
 @application.route("/phase1-2", methods=['GET'])
 def phase1_2():
     name = session.get("name")
@@ -271,6 +284,7 @@ def phase1_2():
     return render_template('phase1-2.html', **context)
 
 
+# require: index, dir
 @application.route("/phase1-3", methods=['GET'])
 def phase1_3():
     idx = session.get("index")
@@ -280,19 +294,23 @@ def phase1_3():
         return render_template('phase1-3.html')
 
 
+# require: idx2, dir
 @application.route("/phase2-1", methods=['GET'])
 def phase2_1():
     idx2 = session.get("idx2")
     if idx2 is None:
-        session["idx2"] = 0
+        session["idx2"] = random.randint(0, 1)
+        session["idx2_time"] = 0
     else:
-        session["idx2"] = idx2 + 1
+        session["idx2"] = (idx2 + 1) % 2
+        session["idx2_time"] = session["idx2_time"] + 1
 
     img = get_agent_pic_from_mny(5)
     context = {"img": img}
     return render_template('phase2-1.html', **context)
 
 
+# require: dir, give
 @application.route("/phase2-2", methods=['GET'])
 def phase2_2():
     give = session.get("give")
@@ -304,6 +322,7 @@ def phase2_2():
     return render_template('phase2-2.html', **context)
 
 
+# require: dir
 @application.route("/phase2-3", methods=['GET'])
 def phase2_3():
     mny = session.get("give", 5)
@@ -312,14 +331,17 @@ def phase2_3():
     return render_template('phase2-3.html', **context)
 
 
+# require: dir
 @application.route("/phase2-4", methods=['GET'])
 def phase2_4():
     idx2 = session.get("idx2")
-    if idx2 is not None and idx2 == 1:
+    if idx2 is not None and session.get("idx2_time") == 1:
+        del session["dir"]
         return application.send_static_file("final.html")
     else:
         return application.send_static_file("phase2-4.html")
 
+# require: dir, give
 @application.route("/generate-action-units-one-pic", methods=['GET'])
 def generate_action_units_one_pic():
     share = session.get("give")
@@ -328,6 +350,7 @@ def generate_action_units_one_pic():
         vh.purse_au_pic(share)
     return "Done"
 
+# require: dir, sex
 @application.route("/generate-action-units", methods=['GET'])
 def generate_action_units():
     if "user" in request.values:
@@ -337,20 +360,17 @@ def generate_action_units():
         vh.purse_au_pics()
     return "Done"
 
+# require: dir
 @application.route("/check-output-files", methods=['GET'])
-def check_output_files():
-    global vh_gen_finish
-    if vh_gen_finish:
-        return "All exists!"
-    
+def check_output_files():   
     usr_name = session.get("dir")
     out_files_dir = "./static/img/testers/" + str(usr_name) + "/gnt/"
     for i in range(11):
         while not os.path.exists(out_files_dir + str(i) + '.png'):
             time.sleep(1)
-    vh_gen_finish = True
     return "Done"
 
+# require: dir
 @application.route("/generate-compare-agent", methods=['GET'])
 def generate_compare_agent():
     import shutil
