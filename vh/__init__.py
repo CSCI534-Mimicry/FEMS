@@ -43,20 +43,22 @@ def get_action_units(mny_idxs, username):
     res = []
     for mny_idx in mny_idxs:
         aus = [0]*11
-        with open(out_dir + '/' + str(mny_idx) + '.csv') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                aus[0] = float(row[' AU01_r'])
-                aus[1] = float(row[' AU02_r'])
-                aus[2] = float(row[' AU04_r'])
-                aus[3] = float(row[' AU05_r'])
-                aus[4] = float(row[' AU06_r'])
-                aus[5] = float(row[' AU07_r'])
-                aus[6] = float(row[' AU10_r'])
-                aus[7] = float(row[' AU12_r'])
-                aus[8] = float(row[' AU25_r'])
-                aus[9] = float(row[' AU26_r'])
-                aus[10] = float(row[' AU45_r'])
+        open_file_path = out_dir + '/' + str(mny_idx) + '.csv'
+        if os.path.exists(open_file_path):
+            with open(out_dir + '/' + str(mny_idx) + '.csv') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    aus[0] = float(row[' AU01_r'])
+                    aus[1] = float(row[' AU02_r'])
+                    aus[2] = float(row[' AU04_r'])
+                    aus[3] = float(row[' AU05_r'])
+                    aus[4] = float(row[' AU06_r'])
+                    aus[5] = float(row[' AU07_r'])
+                    aus[6] = float(row[' AU10_r'])
+                    aus[7] = float(row[' AU12_r'])
+                    aus[8] = float(row[' AU25_r'])
+                    aus[9] = float(row[' AU26_r'])
+                    aus[10] = float(row[' AU45_r'])
         res.append(aus)
     return res
 

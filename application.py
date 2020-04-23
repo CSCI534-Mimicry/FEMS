@@ -42,6 +42,8 @@ class Result(db.Model):
     s2_a2_money = db.Column(db.Integer)
     s2_a2_similar = db.Column(db.Integer)
     s2_a2_human = db.Column(db.Integer)
+    # Sequence
+    s2_seq = db.Column(db.String(32))
 
     def __repr__(self):
         return '<Report %r>' % self.user_uuid
@@ -64,6 +66,7 @@ db.create_all()
 db.session.commit()
 
 def database_get_user(user_uuid):
+    user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
     session["dir"] = user_uuid
     session["sex"] = me.sex
@@ -116,8 +119,16 @@ def database_insert_comment_to_agent2(user_uuid, similar, like_human):
     me.s2_a2_human = like_human
     db.session.commit()
 
+def database_update_user_sec2_seq(user_uuid, seqtype):
+    # type: AB, BA
+    user_uuid = str(user_uuid)
+    me = Result.query.filter_by(user_uuid=user_uuid).first()
+    me.s2_seq = seqtype
+    db.session.commit()
+
 @application.route("/index", methods=['GET'])
 def index():
+    session.clear()
     return application.send_static_file("index.html")
 
 
@@ -166,10 +177,11 @@ def update_mny():
     return "success"
 
 # require: idx2, dir
-def get_agent_pic_from_mny(mny):
+def get_agent_pic_from_mny(mny, idx2 = -1):
     dir_name = session.get("dir")
-    idx2 = session.get("idx2")
-    if idx2 is not None and idx2 == 1:
+    if idx2 == -1:
+        idx2 = session.get("idx2")
+    if idx2 == 1:
         if dir_name is None:
             result = "./img/actors/4/out-Rachel-0.png"
         else:
@@ -202,12 +214,15 @@ def get_current_sec2_round():
 @application.route("/submit_evaluation", methods=['POST'])
 @cross_origin()
 def submit_evaluation():
-    similar = request.values.get("similar")
-    treat = request.values.get("treat")
-    if session.get("idx2", 0) == 0:
+    similar, similar1 = request.values.get("similar"), request.values.get("similar1")
+    treat, treat1 = request.values.get("treat"), request.values.get("treat")
+    me = database_get_user(session.get("dir"))
+    if me.s2_seq == "AB":
         database_insert_comment_to_agent1(session.get("dir"), similar, treat)
+        database_insert_comment_to_agent2(session.get("dir"), similar1, treat1)
     else:
         database_insert_comment_to_agent2(session.get("dir"), similar, treat)
+        database_insert_comment_to_agent1(session.get("dir"), similar1, treat1)
     return "success"
 
 
@@ -244,9 +259,7 @@ def phase1_0():
         idx = session.get("index") + 1
         session["index"] = idx
 
-    name_id = random.randint(0, 13)
-    if "name_ids" in session:
-        name_id = session.get("name_ids")[idx]
+    name_id = session.get("name_ids")[idx]
     name = name_list[name_id]
     give = strategy_list[idx]
     receive = int(give) * 3
@@ -299,11 +312,15 @@ def phase1_3():
 def phase2_1():
     idx2 = session.get("idx2")
     if idx2 is None:
-        session["idx2"] = random.randint(0, 1)
+        session["idx2"] = (random.randint(1, 20000)) % 2
         session["idx2_time"] = 0
+        if session.get("idx2") == 0:
+            database_update_user_sec2_seq(session.get("dir"), "AB")
+        else:
+            database_update_user_sec2_seq(session.get("dir"), "BA")
     else:
         session["idx2"] = (idx2 + 1) % 2
-        session["idx2_time"] = session["idx2_time"] + 1
+        session["idx2_time"] = session.get("idx2_time") + 1
 
     img = get_agent_pic_from_mny(5)
     context = {"img": img}
@@ -325,19 +342,22 @@ def phase2_2():
 # require: dir
 @application.route("/phase2-3", methods=['GET'])
 def phase2_3():
-    mny = session.get("give", 5)
-    img = get_agent_pic_from_mny(mny)
-    context = {"img": img}
+    session["idx2_time"] = session.get("idx2_time") + 1
+    img0 = get_agent_pic_from_mny(5, (session.get("idx2") + 1) % 2)
+    img1 = get_agent_pic_from_mny(5, session.get("idx2"))
+    context = {"img0": img0, "img1": img1}
     return render_template('phase2-3.html', **context)
 
 
 # require: dir
 @application.route("/phase2-4", methods=['GET'])
 def phase2_4():
-    idx2 = session.get("idx2")
-    if idx2 is not None and session.get("idx2_time") == 1:
-        del session["dir"]
+    idx2 = session.get("idx2_time", 0)
+    if idx2 >= 2:
+        session.clear()
         return application.send_static_file("final.html")
+    elif idx2 >= 1:
+        return application.send_static_file("phase2-5.html")
     else:
         return application.send_static_file("phase2-4.html")
 
@@ -365,6 +385,10 @@ def generate_action_units():
 def check_output_files():   
     usr_name = session.get("dir")
     out_files_dir = "./static/img/testers/" + str(usr_name) + "/gnt/"
+    for i in range(11):
+        while not os.path.exists(out_files_dir + str(i) + '.png'):
+            time.sleep(1)
+    out_files_dir = "./static/img/testers/" + str(usr_name) + "/ran/"
     for i in range(11):
         while not os.path.exists(out_files_dir + str(i) + '.png'):
             time.sleep(1)

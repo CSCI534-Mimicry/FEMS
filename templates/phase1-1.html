@@ -6,9 +6,8 @@
     <title>Welcome to FEMS</title>
     <link rel="icon" href="./img/favicon.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./css/style.css?version=2">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script type="text/javascript" src="./js/record.js?version=3"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script type="text/javascript" src="./js/record.js?version=6"></script>
 </head>
 <body onload="init()">
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3 bg-white border-bottom shadow-sm">
@@ -26,11 +25,6 @@
     <p class="lead mb-0">{{name}} decides to share <strong>${{give}}</strong> with you. You receive: <strong>${{give}}
         &times; 3 = ${{receive}}</strong>.</p>
     <p class="lead mb-0" style="margin-bottom:5px;">How do you feel about this offer?</p>
-    <p class="lead mb-0">Please use your facial expression to express your feeling for this
-        offer. You can click <strong>"Take photo"</strong> to take a photo when you are ready and then 
-        click <strong>"Upload"</strong> and <strong>"Next"</strong> for next step. Please make
-        sure your face is clear and complete.</p>
-    <p>(Click "Take photo" to start)</p>
     <div id="video-container">
 
     </div>
@@ -56,7 +50,7 @@
                       clip-rule="evenodd"/>
             </svg>
         </button>
-        <button id="upload" type="button" class="btn btn btn-sm btn-light">
+        <!-- <button id="upload" type="button" class="btn btn btn-sm btn-light">
             Upload
             <svg class="bi bi-cloud-upload" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
                  xmlns="http://www.w3.org/2000/svg">
@@ -67,20 +61,16 @@
                 <path fill-rule="evenodd" d="M8 6a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 6z"
                       clip-rule="evenodd"/>
             </svg>
-        </button>
+        </button> -->
     </div>
     <div style="width:100%;height:50px;">
         <p id="upload-text" style="padding-top: 10px; font-weight: bold; visibility: hidden;">Uploading...</p>
     </div>
-    <button id="next" class="next-btn btn btn-sm btn-info" onclick="submit_pic()">Next&nbsp;&raquo;</button>
+    <button id="next" class="next-btn btn btn-sm btn-info" onclick="upload_pic()">Save & Next&nbsp;&raquo;</button>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+<script src="./js/popper.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -97,14 +97,14 @@ function init2() {
 
 function init3() {
 
-    $("#mny").slider({
+    $(".mny-similar").slider({
         ticks: [1, 2, 3, 4, 5],
         ticks_labels: ["Not similar at all", "Slightly similar", "Moderately similar", "Very similar", "Extremely similar"],
         ticks_snap_bounds: 1,
         value: 1
     });
 
-    $("#mny2").slider({
+    $(".mny-human").slider({
         ticks: [1, 2, 3, 4, 5],
         ticks_labels: ["Not at all", "To some extent", "To a moderate extent", "To a large extent", "To an Extremely great extent"],
         ticks_snap_bounds: 1,
@@ -147,9 +147,11 @@ function update_mny() {
 function send_evaluation() {
     var similar = document.getElementById("mny").value;
     var treat = document.getElementById("mny2").value;
+    var similar1 = document.getElementById("mny3").value;
+    var treat1 = document.getElementById("mny4").value;
     $.ajax({
 	    url: base_url + "/submit_evaluation",
-	    data: {"similar": similar, "treat": treat},
+	    data: {"similar": similar, "treat": treat, "similar1": similar1, "treat": treat1},
 	    type: 'POST',
 	    success: function(result) {
             location.href='/phase2-4';
@@ -175,12 +177,15 @@ function pick_partner() {
 }
 
 function phase2_fb() {
-    setTimeout("javascript:location.href='/phase2-3'", 3000);
+    setTimeout("javascript:location.href='/phase2-4'", 3000);
 }
 
 function phase2_nt() {
     vh_files_check();
 }
 
+function phase2_toq() {
+    setTimeout("javascript:location.href='/phase2-3'", 1000);
+}
 
 
