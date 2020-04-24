@@ -86,7 +86,6 @@ function upload_pic() {
         data: {"img": base64Data},
         type: 'POST',
         success: function(result) {
-            setNextEnable();
             document.getElementById('upload-text').innerHTML = 'Upload success! Proceeding...';
             setTimeout(function(){
                 submit_pic();

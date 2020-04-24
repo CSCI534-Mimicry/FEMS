@@ -215,7 +215,7 @@ def get_current_sec2_round():
 @cross_origin()
 def submit_evaluation():
     similar, similar1 = request.values.get("similar"), request.values.get("similar1")
-    treat, treat1 = request.values.get("treat"), request.values.get("treat")
+    treat, treat1 = request.values.get("treat"), request.values.get("treat1")
     me = database_get_user(session.get("dir"))
     if me.s2_seq == "AB":
         database_insert_comment_to_agent1(session.get("dir"), similar, treat)

@@ -151,7 +151,7 @@ function send_evaluation() {
     var treat1 = document.getElementById("mny4").value;
     $.ajax({
 	    url: base_url + "/submit_evaluation",
-	    data: {"similar": similar, "treat": treat, "similar1": similar1, "treat": treat1},
+	    data: {"similar": similar, "treat": treat, "similar1": similar1, "treat1": treat1},
 	    type: 'POST',
 	    success: function(result) {
             location.href='/phase2-4';
