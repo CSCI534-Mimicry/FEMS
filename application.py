@@ -68,7 +68,7 @@ db.session.commit()
 def database_get_user(user_uuid):
     user_uuid = str(user_uuid)
     me = Result.query.filter_by(user_uuid=user_uuid).first()
-    session["dir"] = user_uuid
+    session["dir"] = str(user_uuid)
     session["sex"] = me.sex
     return me
 
@@ -310,6 +310,9 @@ def phase1_3():
 # require: idx2, dir
 @application.route("/phase2-1", methods=['GET'])
 def phase2_1():
+    if "user" in request.values:
+        session.clear()
+        database_get_user(request.values["user"])
     idx2 = session.get("idx2")
     if idx2 is None:
         session["idx2"] = (random.randint(1, 20000)) % 2
@@ -342,7 +345,7 @@ def phase2_2():
 # require: dir
 @application.route("/phase2-3", methods=['GET'])
 def phase2_3():
-    session["idx2_time"] = session.get("idx2_time") + 1
+    session["idx2_time"] = session.get("idx2_time", 1) + 1
     img0 = get_agent_pic_from_mny(5, (session.get("idx2") + 1) % 2)
     img1 = get_agent_pic_from_mny(5, session.get("idx2"))
     context = {"img0": img0, "img1": img1}
@@ -352,8 +355,11 @@ def phase2_3():
 # require: dir
 @application.route("/phase2-4", methods=['GET'])
 def phase2_4():
-    idx2 = session.get("idx2_time", 0)
-    if idx2 >= 2:
+    idx2 = session.get("idx2_time", -1)
+    print(session.get("dir"), idx2)
+    if idx2 == -1:
+        return application.send_static_file("phase2-4-init.html")
+    elif idx2 >= 2:
         session.clear()
         return application.send_static_file("final.html")
     elif idx2 >= 1:
@@ -412,6 +418,19 @@ def generate_compare_agent():
         if os.path.exists(to_f):
             os.remove(to_f)
         shutil.copy(from_f, to_f)
+    return "Done"
+
+# require: dir
+@application.route("/get-user-email", methods=['POST'])
+@cross_origin()
+def get_user_email():
+    username = str(session.get("dir"))
+    email = request.values.get("email")
+    email_dir = "./static/img/testers/email"
+    if not os.path.exists(email_dir):
+        os.mkdir(email_dir)
+    with open(email_dir + '/email-' + username + '.txt', 'w') as f:
+        f.write(username + '\n' + email)
     return "Done"
 
 def run():

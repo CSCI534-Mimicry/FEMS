@@ -29,7 +29,8 @@
     <img style="width:70%;" src="./img/actors/3/out-Brad-0.png"/>
     <div id="data" style="display:none">10</div>
     <div class="mt-4 mb-4 ml-2">
-        <img style="width:90%" src="./img/slider-2.png">
+        <img style="width:90%" src="./img/slider-2.png" data-toggle="tooltip" data-placement="top" 
+            title="You don't need to drag this slider at this page">
     </div>
     <div style="width:100%;height:20px;"></div>
     <a class="next-btn btn btn-sm btn-info" href="./phase2-intro2.html" role="button">Next&nbsp;&raquo;</a>
@@ -40,5 +41,10 @@
 <script src="./js/popper.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/bootstrap-slider.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 </body>
 </html>

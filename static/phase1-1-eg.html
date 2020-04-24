@@ -28,7 +28,8 @@
     <p class="lead"><strong>Example:</strong> Liam decided to share
         <strong>$7</strong> with you. You receive <strong>$7 &times; 3 = $21</strong>.</p>
     <p class="lead"><strong>1. </strong>How do you feel about this offer?</p>
-    <div class="btn-group mt-2 mb-4 btn-group-toggle" data-toggle="buttons">
+    <div class="btn-group mt-2 mb-4 btn-group-toggle" data-toggle="tooltip" data-placement="bottom" 
+        title="You don't need to choose at this page">
         <label class="btn btn-light active">
             <input type="radio" checked>Neutral
         </label>
@@ -51,7 +52,8 @@
     <p class="lead"><strong>2. </strong>How much money do you want to give back out of your $21?</p>
     <div id="data" style="display:none">21</div>
     <div class="mt-4 mb-4 ml-2">
-        <img style="width:90%" src="./img/slider-1.png">
+        <img style="width:90%" src="./img/slider-1.png" data-toggle="tooltip" data-placement="top" 
+            title="You don't need to drag this slider at this page">
     </div>
     <div style="width:100%;height:50px;"></div>
     <a class="next-btn btn btn-sm btn-info" href="./phase1-st.html" role="button">Next&nbsp;&raquo;</a>
@@ -62,5 +64,10 @@
 <script src="./js/popper.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/bootstrap-slider.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 </body>
 </html>

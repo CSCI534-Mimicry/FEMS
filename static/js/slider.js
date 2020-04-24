@@ -173,11 +173,11 @@ function send_emotion() {
 }
 
 function pick_partner() {
-    setTimeout("javascript:location.href='/phase1-0'", 3000);
+    setTimeout("javascript:location.href='/phase1-0'", 300);
 }
 
 function phase2_fb() {
-    setTimeout("javascript:location.href='/phase2-4'", 3000);
+    setTimeout("javascript:location.href='/phase2-4'", 300);
 }
 
 function phase2_nt() {
@@ -185,7 +185,7 @@ function phase2_nt() {
 }
 
 function phase2_toq() {
-    setTimeout("javascript:location.href='/phase2-3'", 1000);
+    setTimeout("javascript:location.href='/phase2-3'", 300);
 }
 
 

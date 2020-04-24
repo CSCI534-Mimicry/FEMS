@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to FEMS</title>
+    <link rel="icon" href="./img/favicon.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="./css/style.css?version=2">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="./js/vh-generate.js?version=2"></script>
+    <script type="text/javascript" src="./js/slider.js?version=3"></script>
+    <script type="text/javascript" src="./js/phase2-init.js"></script>
+</head>
+<body onload="phase2_nt()">
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3 bg-white border-bottom shadow-sm">
+    <img src="./img/favicon.png" width="25" height="25" class="mr-3" alt="">
+
+    <h5 class="my-0 mr-md-auto font-weight-normal">Affective Computing - FEMS</h5>
+</div>
+<div style='position:fixed;top:0;width:100%;height:80%;text-align:center;display:table;'>
+    <div style='display:table-cell;vertical-align:middle;'>
+        <h2 style="color:#00868B;">Picking up a partner for you, wait a moment... </h2>
+        <h4 style="color:#00868B;">Maybe longer than expected... </h4>
+        <div id="email-submit" style="padding-top: 15px; visibility: hidden;">
+            <h3 style="color: #111111">It may take long time to proceed. <br> If worried, you can fill the form and take personal link once finished.</h3>
+            <div class="form-group" style="width: 100%">
+                <input id="personal-email" class="form-control" type="email" style="width: 50%; margin:0 auto" placeholder="Input your email here...">
+            </div>
+            <button class="btn btn-sm btn-info" style="color: white" onclick="emailSubmit()">Submit</button>
+        </div>
+    </div>
+</div>
+<script>phase2_init();</script>
+</body>
+</html>

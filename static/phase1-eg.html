@@ -7,8 +7,9 @@
     <link rel="icon" href="./img/favicon.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./css/style.css?version=2">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="./js/record-intro.js"></script>
 </head>
-<body onload="init()">
+<body onload="intro_init()">
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3 bg-white border-bottom shadow-sm">
 
     <img src="./img/favicon.png" width="25" height="25" class="mr-3" alt="">
@@ -33,7 +34,7 @@
         <img src="./img/photo.png">
     </div>
     <div class="btn-group">
-        <button type="button" id="snap" class="btn btn-sm btn-light" data-toggle="tooltip" data-placement="top" title="Click here to take photo.">
+        <button type="button" id="snap" class="btn btn-sm btn-light" data-toggle="tooltip" data-placement="top" title="Click here to take photo in following steps. (You don't need to take photo at this example page)">
             Take photo
         </button>
         <button id="remove" type="button" class="btn btn-sm btn-light">
