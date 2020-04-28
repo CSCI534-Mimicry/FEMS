@@ -6,6 +6,7 @@
     <link rel="icon" href="./img/favicon.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./css/style.css?version=2">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="./js/final.js"></script>
 </head>
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-5 mb-3 bg-white border-bottom shadow-sm">
@@ -18,8 +19,15 @@
     <h2 class="display-5 mb-4">Mission Completed</h2>
     <p class="lead">Thank you for your participation!</p>
     <p class="lead">You can now leave this web site. Have a nice day!</p>
+    <div id="feedback-submit" style="padding-top: 15px">
+        <p>Any feedback?</p>
+        <div class="form-group" style="width: 100%">
+            <textarea id="feedback" class="form-control" type="text" style="margin:0 auto" rows="8" placeholder="Input your feedback here..."></textarea>
+        </div>
+        <a class="btn btn-sm btn-info" style="color: white" onclick="submit_feedback()">Submit</a>
+    </div>
 </div>
-<script src="./js/jquery.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="./js/popper.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 </body>

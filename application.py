@@ -127,6 +127,7 @@ def database_update_user_sec2_seq(user_uuid, seqtype):
     db.session.commit()
 
 @application.route("/index", methods=['GET'])
+@application.route("/", methods=['GET'])
 def index():
     session.clear()
     return application.send_static_file("index.html")
@@ -311,7 +312,6 @@ def phase1_3():
 @application.route("/phase2-1", methods=['GET'])
 def phase2_1():
     if "user" in request.values:
-        session.clear()
         database_get_user(request.values["user"])
     idx2 = session.get("idx2")
     if idx2 is None:
@@ -403,6 +403,8 @@ def check_output_files():
 # require: dir
 @application.route("/generate-compare-agent", methods=['GET'])
 def generate_compare_agent():
+    if "user" in request.values:
+        database_get_user(request.values["user"])
     import shutil
     username = str(session.get("dir"))
     user_dir = "./static/img/testers/" + username + "/ran/"
@@ -431,6 +433,21 @@ def get_user_email():
         os.mkdir(email_dir)
     with open(email_dir + '/email-' + username + '.txt', 'w') as f:
         f.write(username + '\n' + email)
+    return "Done"
+
+@application.route("/submit-feedback", methods=['POST'])
+@cross_origin()
+def submit_feedback():
+    import time
+    username = str(session.get("dir", 'anonymous'))
+    timestamp = str(time.time())
+    feedback = request.values.get("feedback")
+    feedback_path = './feedback'
+    if not os.path.exists(feedback_path):
+        os.mkdir(feedback_path)
+    filename = 'fb_' + timestamp + '_' + username + '.txt'
+    with open(feedback_path + '/' + filename, 'w') as f:
+        f.write(feedback)
     return "Done"
 
 def run():

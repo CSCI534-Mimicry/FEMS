@@ -4,7 +4,7 @@ function showEmailSubmit() {
 
 function showThankyou() {
     document.getElementById('email-submit').innerHTML = `<div class="alert alert-success" style="width: 60%; margin:0 auto" role="alert">
-        <strong>Successly submitted!</strong> Please check your email within 24 hours for next step or just wait here without refreshing this page. 
+        <strong>Successfully submitted!</strong> Please check your email within 24 hours for next step or just wait here without refreshing this page. 
         Thank you for your participance and patience.
     </div>`;
 }
